@@ -1,31 +1,35 @@
 bad_ids = []
 
-for range in File.read("../input.txt").chomp.split(',')
+# Gets the smallest and biggest IDs for a given id length
+def smallest_id(num_digits)
+  10**(num_digits - 1)
+end
+
+def biggest_id(num_digits)
+  (10**num_digits) - 1
+end
+
+File.read('../input.txt').chomp.split(',').each do |range|
   bad_ids << []
-  
+
   range_start, range_end = range.split('-')
-  
-  # Determine the repeating pattern to check for in the id
-  get_prefix = ->(num_str) { num_str[0...(num_str.length / 2)].to_i }
-  
-  # Gets the smallest and biggest IDs for a given id length
-  smallest_id = ->(num_digits) { "1#{'0' * (num_digits - 1)}".to_i }
-  biggest_id = ->(num_digits) { ('9' * num_digits).to_i }
 
   # The smallest and largest repeating pattern to consider based on the range boundaries
-  start_prefix = (range_start.length.even? \
-    ? get_prefix.call(range_start)
-    : smallest_id.call((range_start.length + 1) / 2))
-  end_prefix = (range_end.length.even? \
-    ? get_prefix.call(range_end)
-    : biggest_id.call((range_end.length - 1) / 2))
+  start_prefix = [
+    range_start[0...(range_start.length.to_f / 2).floor].to_i,
+    smallest_id((range_start.length.to_f / 2).ceil)
+  ].max
+  end_prefix = [
+    range_end[0...(range_end.length.to_f / 2).ceil].to_i,
+    biggest_id((range_end.length.to_f / 2).floor)
+  ].min
 
-  # Determine the smallest and largest repeating pattern for a given id length, bounded by the range prefixes
-  make_start = ->(num_digits) { [smallest_id.call(num_digits / 2), start_prefix].max }
-  make_end = ->(num_digits) { [biggest_id.call(num_digits / 2), end_prefix].min }
-  
-  for num_digits in (range_start.length..range_end.length).select(&:even?)
-    for prefix in (make_start.call(num_digits)..make_end.call(num_digits))
+  (range_start.length..range_end.length).select(&:even?).each do |num_digits|
+    # Determine the smallest and largest repeating pattern for a given id length, bounded by the full range prefixes
+    section_start = [smallest_id(num_digits / 2), start_prefix].max
+    section_end = [biggest_id(num_digits / 2), end_prefix].min
+
+    (section_start..section_end).each do |prefix|
       id = "#{prefix}#{prefix}".to_i
       bad_ids[-1] << id if id.between?(range_start.to_i, range_end.to_i)
     end
