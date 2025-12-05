@@ -1,3 +1,5 @@
+require_relative '../../lib/gif_maker'
+
 input_grid = File.readlines('../input.txt', chomp: true)
 
 def get_surrounds(grid, row_index, column_index)
@@ -40,6 +42,10 @@ loop do
 
   access_grids << new_grid
 end
+
+gif = GifMaker.from_line_arrays(access_grids, delay: 15)
+
+gif.save('forklift_access.gif')
 
 access_grids[-1].each { |line| puts line }
 
