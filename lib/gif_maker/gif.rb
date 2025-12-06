@@ -1,27 +1,30 @@
-require 'gif'
+require 'gifenc'
+require_relative 'pillow_renderer'
 
 module GifMaker
-
   # GIF wrapper
   class Gif
-    # delay: 10 = 1/100 sec per frame
-    def initialize(width, height, delay: 10)
-      @width = width
-      @height = height
+    def initialize(delay, rendering_options)
       @delay = delay
-      @gif = Gifenc::Gif.new(@width, @height, gct: TileLoader.instance.color_table, delay: @delay)
+      @renderer = PillowRenderer.new(rendering_options)
     end
 
-    def self.from_frame(frame, delay: 10)
-      Gif.new(frame.width, frame.height, delay: delay).tap { |gif| gif.add_frame(frame) }
-    end
-
-    def add_frame(frame)
-      @gif.images << frame.canvas.tap { |image| image.delay ||= @delay }
+    # frames_data: array of hashes, each hash maps color hex to array of lines
+    # Example: [{ '#ff0000' => ['@ @', ' @ ', '@ @'], '#00ff00' => [' x ', 'x x', ' x '] }]
+    def render(frames_data)
+      @frames = @renderer.render_frames(frames_data)
     end
 
     def save(file_path)
-      @gif.save(file_path)
+      return if @frames.nil? || @frames.empty?
+
+      size = [@frames.map(&:width).max, @frames.map(&:height).max]
+      Gifenc::Gif.new(*size, gct: @renderer.color_table, delay: @delay).tap do |gif|
+        puts '  Appending frames to gif...'
+        @frames.each do |frame|
+          gif.images << frame.tap { |img| img.delay ||= @delay }
+        end
+      end.tap { puts '  Saving gif...' }.save(file_path)
     end
   end
 end

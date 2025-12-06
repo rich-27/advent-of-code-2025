@@ -5,8 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Auto: Current file",
+      "type": "auto-debug",
+      "request": "launch",
+      "map": {
+        "*.py": "Python Debugger: Current file",
+        "*.rb": "Ruby Debugger: Current file"
+      }
+    },
+    {
+      "name": "Python Debugger: Current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${fileDirname}",
+      "console": "integratedTerminal"
+    },
+    {
       "type": "rdbg",
-      "name": "Debug current file with rdbg",
+      "name": "Ruby Debugger: Current file",
       "request": "launch",
       "script": "${file}",
       "cwd": "${fileDirname}",

@@ -1,5 +1,7 @@
 {
   "workbench.colorTheme": "Spinel",
   "workbench.preferredDarkColorTheme": "Spinel",
-  "workbench.preferredLightColorTheme": "Spinel Light"
+  "workbench.preferredLightColorTheme": "Spinel Light",
+  "python.terminal.activateEnvironment": false,
+  "python.terminal.activateEnvInCurrentTerminal": false
 }
