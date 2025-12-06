@@ -1,4 +1,4 @@
-input_grid = File.readlines('../input.txt', chomp: true)
+input_grid = File.readlines(File.expand_path('../input.txt', __dir__), chomp: true)
 
 def get_surrounds(grid, row_index, column_index)
   (-1..1).flat_map do |row_offset|

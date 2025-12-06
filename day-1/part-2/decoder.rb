@@ -1,7 +1,7 @@
 dial_position = 50
 zero_count = 0
 
-input_data = File.read('../input.txt').split.map { |line| { direction: line[0], amount: line[1..].to_i } }
+input_data = File.read(File.expand_path('../input.txt', __dir__)).split.map { |line| { direction: line[0], amount: line[1..].to_i } }
 
 input_data.map { |operation| operation.values_at(:direction, :amount) }.each do |direction, amount|
   zero_pass_count = amount / 100

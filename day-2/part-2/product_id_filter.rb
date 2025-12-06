@@ -9,7 +9,7 @@ def biggest_id(num_digits)
   (10**num_digits) - 1
 end
 
-File.read('../input.txt').chomp.split(',').each do |range|
+File.read(File.expand_path('../input.txt', __dir__)).chomp.split(',').each do |range|
   bad_ids << Set[]
 
   range_start, range_end = range.split('-')

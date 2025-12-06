@@ -6,7 +6,7 @@ def parse_input(fresh_id_ranges_string)
   end
 end
 
-fresh_id_ranges = parse_input(File.read('../input.txt').split("\n\n").first)
+fresh_id_ranges = parse_input(File.read(File.expand_path('../input.txt', __dir__)).split("\n\n").first)
 
 def merge_ranges(ranges_array)
   return [] if ranges_array.empty?

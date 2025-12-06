@@ -1,4 +1,4 @@
-battery_joltages = File.readlines('../input.txt', chomp: true).map { |line| line.split('').map(&:to_i) }
+battery_joltages = File.readlines(File.expand_path('../input.txt', __dir__), chomp: true).map { |line| line.split('').map(&:to_i) }
 
 powered_count = 2
 

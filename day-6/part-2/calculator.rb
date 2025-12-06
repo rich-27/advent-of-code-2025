@@ -13,7 +13,7 @@ end
 
 make_number = ->(chars) { chars.map(&:strip).all?(&:empty?) ? nil : chars.join('').to_i }
 
-operations = File.readlines('../input.txt', chomp: true).map(&:chars).then do |lines|
+operations = File.readlines(File.expand_path('../input.txt', __dir__), chomp: true).map(&:chars).then do |lines|
   operation_pairs = lines.last.zip(lines[0].zip(*lines[1...-1]).map(&make_number))
   operation_pairs.reduce([[nil, []]], &lambda do |operations, (operation, operand)|
     if operation.strip.empty? && operand.nil?

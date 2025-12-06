@@ -9,7 +9,7 @@ def parse_input(fresh_id_ranges_string, available_ids_string)
   ]
 end
 
-fresh_id_ranges, available_ids = parse_input(*File.read('../input.txt').split("\n\n"))
+fresh_id_ranges, available_ids = parse_input(*File.read(File.expand_path('../input.txt', __dir__)).split("\n\n"))
 
 puts "Fresh id count: #{available_ids.select do |id|
   fresh_id_ranges.any? { |fresh_id_range| fresh_id_range.cover?(id) }
