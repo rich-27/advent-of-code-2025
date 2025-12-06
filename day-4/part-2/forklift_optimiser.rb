@@ -1,4 +1,6 @@
-input_grid = File.readlines('../input.txt', chomp: true)
+require_relative '../../lib/gif_maker'
+
+input_grid = File.readlines(File.expand_path('../input.txt', __dir__), chomp: true)
 
 def get_surrounds(grid, row_index, column_index)
   (-1..1).flat_map do |row_offset|
@@ -44,3 +46,20 @@ end
 access_grids[-1].each { |line| puts line }
 
 puts "Forklift accessible position count: #{access_grids[-1].map { |line| line.count 'x' }.sum}"
+
+puts "Making gif:"
+
+frame_data_stub = { '#ffffff': '@', '#609ad8': 'x' }
+
+grid_to_frame_data = lambda do |grid|
+  frame_data_stub.transform_values do |filter_char|
+    grid.map { |line| line.chars.map { |char| char == filter_char ? char : ' ' }.join }
+  end
+end
+
+GifMaker.from_frames_data(
+  access_grids.map(&grid_to_frame_data),
+  delay: 15
+).save(File.expand_path('forklift_access.gif', __dir__))
+
+puts "Done"
