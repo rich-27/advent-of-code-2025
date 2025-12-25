@@ -11,9 +11,11 @@ operation_to_s = lambda do |(operation, operands)|
   [operands, operation].join(' ')
 end
 
-operations = File.readlines(File.expand_path('../input.txt', __dir__)).map { |line| line.chomp.split(' ').map(&:chomp) }.then do |lines|
-  operands = lines[0...-1].map { |line| line.map(&:to_i) }
-  lines.last.zip(operands[0].zip(*operands[1..]))
+operations = File.readlines(File.expand_path('../input.txt', __dir__)).then do |lines|
+  lines.map { |line| line.chomp.split(' ').map(&:chomp) }.then do |lines|
+    operands = lines[0...-1].map { |line| line.map(&:to_i) }
+    lines.last.zip(operands[0].zip(*operands[1..]))
+  end
 end
 
 operation_results = operations.map(&apply_operation)
